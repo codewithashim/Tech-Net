@@ -25,9 +25,12 @@ export default function Signup() {
                 'url(https://images.unsplash.com/photo-1590069261209-f8e9b8642343?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1376&q=80)',
             }}
           />
-          <div className="relative z-20 flex items-center text-lg font-medium">
+          <Link
+            to="/"
+            className="relative z-20 flex items-center text-lg font-medium"
+          >
             <img className="h-8" src={logo} alt="" />
-          </div>
+          </Link>
           <div className="relative z-20 mt-auto">
             <blockquote className="space-y-2"></blockquote>
           </div>

@@ -1,15 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { FiSend } from 'react-icons/fi';
-
-const dummyComments = [
-  'Bhalo na',
-  'Ki shob ghori egula??',
-  'Eta kono product holo ??',
-  '200 taka dibo, hobe ??',
-];
+import {
+  useGetCommentQuery,
+  usePostCommentMutation,
+} from '@/redux/features/products/productApi';
 
 interface IProps {
   id: string;
@@ -18,9 +16,24 @@ interface IProps {
 export default function ProductReview({ id }: IProps) {
   const [inputValue, setInputValue] = useState<string>('');
   console.log(inputValue);
+
+  const { data } = useGetCommentQuery(id, {
+    refetchOnMountOrArgChange: true,
+    pollingInterval: 20000,
+  });
+
+  const [postComment, { isLoading, isError }] = usePostCommentMutation();
+  console.log(isLoading, isError);
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+    const opctions = {
+      id: id,
+      data: {
+        comment: inputValue,
+      },
+    };
+    postComment(opctions);
     setInputValue('');
   };
 
@@ -29,8 +42,8 @@ export default function ProductReview({ id }: IProps) {
   };
 
   return (
-    <div className="max-w-7xl mx-auto mt-5">
-      <form className="flex gap-5 items-center" onSubmit={handleSubmit}>
+    <div className="mx-auto mt-5 max-w-7xl">
+      <form className="flex items-center gap-5" onSubmit={handleSubmit}>
         <Textarea
           className="min-h-[30px]"
           onChange={handleChange}
@@ -44,8 +57,8 @@ export default function ProductReview({ id }: IProps) {
         </Button>
       </form>
       <div className="mt-10">
-        {dummyComments.map((comment, index) => (
-          <div key={index} className="flex gap-3 items-center mb-5">
+        {data?.comments?.map((comment: string, index: number) => (
+          <div key={index} className="flex items-center gap-3 mb-5">
             <Avatar>
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>

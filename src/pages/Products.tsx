@@ -2,21 +2,16 @@ import ProductCard from '@/components/ProductCard';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
-import { useToast } from '@/components/ui/use-toast';
-import { useGetProductsQuery } from '@/redux/api/apiSlice';
+import { useGetProductsQuery } from '@/redux/features/products/productApi';
 import {
   setPriceRange,
   toggleState,
 } from '@/redux/features/products/productSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { IProduct } from '@/types/globalTypes';
-import { useEffect, useState } from 'react';
 
 export default function Products() {
-  const { data, isLoading, error } = useGetProductsQuery(undefined);
-
-  const { toast } = useToast();
-
+  const { data, isLoading } = useGetProductsQuery(undefined);
   const { priceRange, status } = useAppSelector((state) => state.product);
   const dispatch = useAppDispatch();
 
@@ -39,14 +34,22 @@ export default function Products() {
     productsData = data?.data;
   }
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen py-40 text-2xl">
+        Loading...
+      </div>
+    );
+  }
+
   return (
-    <div className="grid grid-cols-12 max-w-7xl mx-auto relative ">
+    <div className="relative grid grid-cols-12 mx-auto max-w-7xl ">
       <div className="col-span-3 z mr-10 space-y-5 border rounded-2xl border-gray-200/80 p-5 self-start sticky top-16 h-[calc(100vh-80px)]">
         <div>
           <h1 className="text-2xl uppercase">Availability</h1>
           <div
             onClick={() => dispatch(toggleState())}
-            className="flex items-center space-x-2 mt-3"
+            className="flex items-center mt-3 space-x-2"
           >
             <Switch id="in-stock" />
             <Label htmlFor="in-stock">In stock</Label>
@@ -66,7 +69,7 @@ export default function Products() {
           <div>From 0$ To {priceRange}$</div>
         </div>
       </div>
-      <div className="col-span-9 grid grid-cols-3 gap-10 pb-20">
+      <div className="grid grid-cols-3 col-span-9 gap-10 pb-20">
         {productsData?.map((product: IProduct) => (
           <ProductCard product={product} />
         ))}
