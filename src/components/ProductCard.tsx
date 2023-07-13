@@ -2,7 +2,7 @@ import { IProduct } from '@/types/globalTypes';
 import { toast } from './ui/use-toast';
 import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
-import { useAppDispatch } from '@/redux/reduxhooks/reduxhooks';
+import { useAppDispatch } from '@/redux/hook';
 import { addToCart } from '@/redux/features/cart/cartSlice';
 
 interface IProps {
@@ -18,7 +18,6 @@ export default function ProductCard({ product }: IProps) {
       description: 'Product Added',
     });
   };
-
   return (
     <div>
       <div className="rounded-2xl h-[480px] flex flex-col items-start justify-between p-5 overflow-hidden shadow-md border border-gray-100 hover:shadow-2xl hover:scale-[102%] transition-all gap-2">

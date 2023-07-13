@@ -1,4 +1,6 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
+
 interface IProduct {
   status: boolean;
   priceRange: number;
@@ -11,21 +13,17 @@ const initialState: IProduct = {
 
 const productSlice = createSlice({
   name: 'product',
-  initialState: initialState,
+  initialState,
   reducers: {
-    toggleStatus: (state) => {
+    toggleState: (state) => {
       state.status = !state.status;
     },
     setPriceRange: (state, action: PayloadAction<number>) => {
       state.priceRange = action.payload;
     },
-    reset: (state) => {
-      state.status = false;
-      state.priceRange = 150;
-    },
   },
 });
 
-export const { toggleStatus, setPriceRange, reset } = productSlice.actions;
+export const { toggleState, setPriceRange } = productSlice.actions;
 
 export default productSlice.reducer;
